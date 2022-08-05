@@ -87,7 +87,7 @@ class Login extends React.Component {
             className="loginForm btn btn-light"
             data-testid="btn-settings"
             value="Configurações"
-            onClick={ this.handleSubmit }
+            onClick={ this.btnSettings }
           >
             Configurações
           </button>
