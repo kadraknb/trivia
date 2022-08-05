@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { userLogin } from '../redux/actions';
-
+import userLogin from '../redux/actions';
 import getToken from '../services/getToken';
 
 class Login extends React.Component {
@@ -31,10 +30,10 @@ class Login extends React.Component {
 
   handleSubmit = async () => {
     const token = await getToken();
-    localStorage.setItem('token', JSON.stringify(token));
+    localStorage.setItem('token', token);
     const { dispatchPersonalData, history } = this.props;
     dispatchPersonalData(this.state);
-    history.push('/');
+    history.push('/game');
   }
 
   handleChange = ({ target }) => {
