@@ -5,8 +5,8 @@ class Game extends React.Component {
   render() {
     return (
       <div>
-      <h1>Trivia</h1>
-      <Header />
+        <h1>Trivia</h1>
+        <Header />
       </div>
     );
   }
