@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { userLogin } from '../redux/actions';
+import userLogin from '../redux/actions';
+import getToken from '../services/getToken';
 
 class Login extends React.Component {
   constructor() {
@@ -27,10 +28,12 @@ class Login extends React.Component {
     if (checker === 1) this.setState({ isDisable: false });
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
+    const token = await getToken();
+    localStorage.setItem('token', token);
     const { dispatchPersonalData, history } = this.props;
     dispatchPersonalData(this.state);
-    history.push('/');
+    history.push('/game');
   }
 
   handleChange = ({ target }) => {
@@ -43,7 +46,7 @@ class Login extends React.Component {
     return (
       <form className="LoginForm">
         <fieldset>
-          <p>Triva</p>
+          <p>Trivia</p>
           <input
             className="loginForm placeholder col-10 bg-light"
             data-testid="input-gravatar-email"
@@ -68,7 +71,7 @@ class Login extends React.Component {
             type="button"
             className="loginForm btn btn-light"
             data-testid="btn-play"
-            value="Entrar"
+            value="Play"
             onClick={ this.handleSubmit }
             disabled={ isDisable }
           >
