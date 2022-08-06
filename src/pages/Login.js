@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import userLogin from '../redux/actions';
+import { getTriviaAction, userLogin } from '../redux/actions';
 import getToken from '../services/getToken';
+import getTrivia from '../services/getTrivia';
 
 class Login extends React.Component {
   constructor() {
@@ -28,12 +29,26 @@ class Login extends React.Component {
     if (checker === 1) this.setState({ isDisable: false });
   }
 
+  validToken = async (token) => {
+    const trivia = await getTrivia(token);
+    if (trivia.response_code !== 0) {
+      localStorage.removeItem('token');
+      return '/';
+    }
+    const { dispatchTrivia } = this.props;
+    console.log(trivia);
+    dispatchTrivia(trivia);
+    return '/game';
+  }
+
   handleSubmit = async () => {
     const token = await getToken();
+    this.validToken('token');
     localStorage.setItem('token', token);
     const { dispatchPersonalData, history } = this.props;
     dispatchPersonalData(this.state);
-    history.push('/game');
+    const rota = await this.validToken(token);
+    history.push(rota);
   }
 
   btnSettings = () => {
@@ -98,6 +113,7 @@ class Login extends React.Component {
 }
 const mapDispatchToProps = (dispatch) => ({
   dispatchPersonalData: (loginData) => dispatch(userLogin(loginData)),
+  dispatchTrivia: (trivia) => dispatch(getTriviaAction(trivia)),
 });
 
 Login.propTypes = {
@@ -105,6 +121,7 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  dispatchTrivia: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
