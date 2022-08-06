@@ -51,6 +51,11 @@ class Login extends React.Component {
     history.push(rota);
   }
 
+  btnSettings = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  }
+
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value }, () => this.validateFields());
@@ -91,6 +96,15 @@ class Login extends React.Component {
             disabled={ isDisable }
           >
             Play
+          </button>
+          <button
+            type="button"
+            className="loginForm btn btn-light"
+            data-testid="btn-settings"
+            value="Configurações"
+            onClick={ this.btnSettings }
+          >
+            Configurações
           </button>
         </fieldset>
       </form>

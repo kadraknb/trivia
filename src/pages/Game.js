@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Header from '../components/Header';
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -44,6 +46,8 @@ class Game extends React.Component {
     const { perguntaN } = this.state;
     return (
       <div>
+        <Header />
+        <h1>Trivia</h1>
         <h2 data-testid="question-category">{game[perguntaN].category}</h2>
         <h4 data-testid="question-text">{game[perguntaN].question}</h4>
         <ol data-testid="answer-options">
