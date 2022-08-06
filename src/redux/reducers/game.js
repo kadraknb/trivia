@@ -1,11 +1,13 @@
+import { GET_TRIVIA } from '../actions';
+
 const INITIAL_STATE = {
-  pontos: '',
+  game: [],
 };
 
 function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case 'GAME_PLAY':
-    return action.GameData;
+  case GET_TRIVIA:
+    return action.payload.results;
   default:
     return state;
   }
