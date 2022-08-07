@@ -54,8 +54,8 @@ class Game extends React.Component {
       </button>);
     const answerFalse = (game[perguntaN].incorrect_answers.map((aa, ii) => (
       <button
-        data-testid={ `wrong-answer-${ii}` } 
-        className={ turnFinished ? 'incorrectAnswer' : '' } 
+        data-testid={ `wrong-answer-${ii}` }
+        className={ turnFinished ? 'incorrectAnswer' : '' }
         key={ ii }
         type="button"
         onClick={ this.handleAnswer }
