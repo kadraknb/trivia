@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getTriviaAction, userLogin } from '../redux/actions';
+import { getTriviaAction, playerLogin } from '../redux/actions';
 import getToken from '../services/getToken';
 import getTrivia from '../services/getTrivia';
 
@@ -36,14 +36,12 @@ class Login extends React.Component {
       return '/';
     }
     const { dispatchTrivia } = this.props;
-    console.log(trivia);
     dispatchTrivia(trivia);
     return '/game';
   }
 
   handleSubmit = async () => {
     const token = await getToken();
-    this.validToken('token');
     localStorage.setItem('token', token);
     const { dispatchPersonalData, history } = this.props;
     dispatchPersonalData(this.state);
@@ -112,7 +110,7 @@ class Login extends React.Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchPersonalData: (loginData) => dispatch(userLogin(loginData)),
+  dispatchPersonalData: (loginData) => dispatch(playerLogin(loginData)),
   dispatchTrivia: (trivia) => dispatch(getTriviaAction(trivia)),
 });
 

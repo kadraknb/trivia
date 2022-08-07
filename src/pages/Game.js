@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { playerPerformance } from '../redux/actions';
 
 import Header from '../components/Header';
 
@@ -9,33 +10,58 @@ class Game extends React.Component {
     super();
     this.state = {
       perguntaN: 0,
+      assertions: 0,
+      score: 0,
+      isActive: false,
+      turnFinished: false,
     };
   }
 
-  resposta = () => {
+  nextQuestion = () => {
+    this.setState({ turnFinished: false });
     const { perguntaN } = this.state;
-    this.setState({ perguntaN: perguntaN + 1 });
+    this.setState({ perguntaN: perguntaN + 1, isActive: true });
+  }
+
+  handleAnswer = (event) => {
+    const { assertions, score, isActive } = this.state;
+    const unitScore = 40;
+    const getId = event.target.id;
+    this.setState({ turnFinished: true });
+    if (getId === 'correct') {
+      this.setState({
+        assertions: assertions + 1, score: score + unitScore });
+    }
+    if (isActive === false) this.setState({ isActive: true });
   }
 
   answer = () => {
     const { store: { game } } = this.props;
-    const { perguntaN } = this.state;
+    const { perguntaN, turnFinished } = this.state;
 
     const N_MAX = game[perguntaN].incorrect_answers.length + 1;
     const N_RANDOM = Math.floor(Math.random() * N_MAX);
 
     const answerTrue = (
-      <li data-testid="correct-answer" key="true">
-        <button type="button" onClick={ this.resposta }>
-          {game[perguntaN].correct_answer}
-        </button>
-      </li>);
+      <button
+        data-testid="correct-answer"
+        key="true"
+        type="button"
+        id={ turnFinished ? 'correctAnswer' : '' }
+        onClick={ this.handleAnswer }
+      >
+        {game[perguntaN].correct_answer}
+      </button>);
     const answerFalse = (game[perguntaN].incorrect_answers.map((aa, ii) => (
-      <li data-testid={ `wrong-answer-${ii}` } key={ ii }>
-        <button type="button" onClick={ this.resposta }>
-          {aa}
-        </button>
-      </li>
+      <button
+        data-testid={ `wrong-answer-${ii}` } 
+        className={ turnFinished ? 'incorrectAnswer' : '' } 
+        key={ ii }
+        type="button"
+        onClick={ this.handleAnswer }
+      >
+        {aa}
+      </button>
     )));
     answerFalse.splice(N_RANDOM, 0, answerTrue);
     return answerFalse;
@@ -43,7 +69,16 @@ class Game extends React.Component {
 
   render() {
     const { store: { game } } = this.props;
-    const { perguntaN } = this.state;
+    const { perguntaN, isActive } = this.state;
+    const nextButton = (
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ this.nextQuestion }
+      >
+        Next
+      </button>
+    );
     return (
       <div>
         <Header />
@@ -53,6 +88,7 @@ class Game extends React.Component {
         <ol data-testid="answer-options">
           { this.answer() }
         </ol>
+        { isActive ? nextButton : '' }
       </div>
     );
   }
@@ -66,4 +102,8 @@ Game.propTypes = {
 
 const mapStateToProps = (store) => ({ store });
 
-export default connect(mapStateToProps)(Game);
+const mapDispatchToProps = (dispatch) => ({
+  getplayerPerformance: (performanceData) => dispatch(playerPerformance(performanceData)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

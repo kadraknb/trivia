@@ -8,8 +8,6 @@ class Header extends React.Component {
     const { gravatarEmail } = this.props;
     const getHash = md5(gravatarEmail).toString();
     const img = `https://www.gravatar.com/avatar/${getHash}`;
-    console.log(getHash);
-
     return (
       <div>
         <header>
@@ -23,7 +21,7 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  gravatarEmail: state.user.gravatarEmail,
+  gravatarEmail: state.player.gravatarEmail,
 });
 
 Header.propTypes = {

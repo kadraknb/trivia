@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Router, Route } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
@@ -54,7 +54,7 @@ describe('Página de Login', () => {
         expect(playButton).toBeDisabled();
     })
     it('verifica se é verificado o botão de login é habilitado quando e-mail e password atendem aos requisitos:', () => {
-        renderWithRouterAndRedux(<Login />)
+         renderWithRouterAndRedux(<Login />)
 
         const userInputEmail = screen.getByTestId('input-gravatar-email');
         userEvent.type(userInputEmail, 'some@some.com');
@@ -76,7 +76,24 @@ describe('Página de Login', () => {
         userEvent.type(userInputName, 'Michel');
 
         const playButton = screen.getByTestId('btn-play');       
-        userEvent.click(playButton);
-        expect(await screen.findByText(/game/i)).toBeInTheDocument();
+        userEvent.click(playButton);       
+
+        
+        await waitFor(() => expect(screen.getByTestId(/answer-options/i)).toBeInTheDocument(), {timeout: 3000});
+    });
+    it('verifica se ao clicar no botão de Configurações, o usuário é redirecionado para a página correspondente:', async () => {
+        renderWithRouterAndRedux(<App />)
+
+        const userInputEmail = screen.getByTestId('input-gravatar-email');
+        userEvent.type(userInputEmail, 'some@some.com');
+
+        const userInputName = screen.getByTestId('input-player-name');
+        userEvent.type(userInputName, 'Michel');
+
+        const playButton = screen.getByTestId('btn-settings');       
+        userEvent.click(playButton);       
+
+        
+        await waitFor(() => expect(screen.getByTestId(/settings/i)).toBeInTheDocument(), {timeout: 3000});
     });
 })
