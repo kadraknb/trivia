@@ -24,11 +24,26 @@ class Game extends React.Component {
     getplayerPerformance(this.state);
   }
 
+  upToLStorage = () => {
+    const { store: { player: { img, name, score } } } = this.props;
+    const newRanking = [img, name, score];
+    const rankings = JSON.parse(localStorage.getItem('ranking'));
+    if (rankings === null) {
+      localStorage.setItem('ranking', JSON.stringify([newRanking]));
+    } else {
+      rankings.push(newRanking);
+      localStorage.setItem('ranking', JSON.stringify(rankings));
+    }
+  };
+
   nextQuestion = () => {
     const { perguntaN } = this.state;
     const { history } = this.props;
     const maxPalyed = 4;
-    if (perguntaN === maxPalyed) history.push('/feedback');
+    if (perguntaN === maxPalyed) {
+      this.upToLStorage();
+      history.push('/feedback');
+    }
     this.setState({ turnFinished: false });
     this.setState({ perguntaN: perguntaN + 1, isActive: true });
   }
@@ -157,6 +172,11 @@ class Game extends React.Component {
 Game.propTypes = {
   store: PropTypes.shape({
     game: PropTypes.arrayOf(PropTypes.shape()),
+    player: PropTypes.shape({
+      img: PropTypes.string,
+      name: PropTypes.string,
+      score: PropTypes.number,
+    }),
   }).isRequired,
   getplayerPerformance: PropTypes.func.isRequired,
   history: PropTypes.shape({

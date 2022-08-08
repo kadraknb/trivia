@@ -6,4 +6,6 @@ export const playerPerformance = (performanceData) => ({
 export const GET_TRIVIA = 'GET_TRIVIA';
 export const getTriviaAction = (payload) => ({ type: GET_TRIVIA, payload });
 
+export const getIgmAction = (payload) => ({ type: 'GET_IMG', payload });
+
 //  default userLogin;

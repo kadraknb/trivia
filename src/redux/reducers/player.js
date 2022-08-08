@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
   name: '',
+  img: '',
   assertions: 0,
   score: 0,
   gravatarEmail: '',
@@ -14,6 +15,11 @@ function playerReducer(state = INITIAL_STATE, action) {
       ...state,
       assertions: Number(action.performanceData.assertions),
       score: Number(action.performanceData.score),
+    };
+  case 'GET_IMG':
+    return {
+      ...state,
+      img: action.payload,
     };
   default:
     return state;
