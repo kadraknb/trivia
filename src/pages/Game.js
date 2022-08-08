@@ -25,8 +25,11 @@ class Game extends React.Component {
   }
 
   nextQuestion = () => {
-    this.setState({ turnFinished: false });
     const { perguntaN } = this.state;
+    const { history } = this.props;
+    const maxPalyed = 4;
+    if (perguntaN === maxPalyed) history.push('/feedback');
+    this.setState({ turnFinished: false });
     this.setState({ perguntaN: perguntaN + 1, isActive: true });
   }
 
@@ -156,6 +159,9 @@ Game.propTypes = {
     game: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
   getplayerPerformance: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = (store) => ({ store });

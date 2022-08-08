@@ -7,12 +7,14 @@ import {
 import Login from './pages/Login';
 import Game from './pages/Game';
 import Settings from './pages/Settings';
+import Feedback from './pages/Feedback';
 
 import './index.css';
 
 export default function App() {
   return (
     <Switch>
+      <Route path="/feedback" exact component={ Feedback } />
       <Route path="/settings" exact component={ Settings } />
       <Route path="/game" exact component={ Game } />
       <Route path="/" exact component={ Login } />
