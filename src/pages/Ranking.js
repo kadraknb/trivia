@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { playerPerformance } from '../redux/actions';
 
-import Header from '../components/Header';
-
 class Ranking extends React.Component {
   goHome = () => {
     const { history } = this.props;
@@ -15,7 +13,6 @@ class Ranking extends React.Component {
   render() {
     return (
       <div>
-        <Header />
         <h1 data-testid="ranking-title">Ranking</h1>
         <button
           type="button"
