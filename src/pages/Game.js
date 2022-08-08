@@ -108,7 +108,7 @@ class Game extends React.Component {
   }
 
   handleTimer = ({ seconds }) => (
-    <span id="timer">
+    <span data-testid="countdown" id="timer">
       {seconds}
     </span>
   );
