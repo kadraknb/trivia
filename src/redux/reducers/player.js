@@ -12,8 +12,8 @@ function playerReducer(state = INITIAL_STATE, action) {
   case 'USER_PERFORMANCE':
     return {
       ...state,
-      assertions: action.performanceData.assertions,
-      score: action.performanceData.score,
+      assertions: Number(action.performanceData.assertions),
+      score: Number(action.performanceData.score),
     };
   default:
     return state;
