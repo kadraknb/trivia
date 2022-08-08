@@ -24,7 +24,7 @@ class Header extends React.Component {
             src={ this.getImg(gravatarEmail) }
           />
           <p data-testid="header-player-name">{name}</p>
-          <p data-testid="header-score">{score}</p>
+          <p id="score" data-testid="header-score">{score}</p>
         </header>
       </div>
     );
