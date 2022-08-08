@@ -1,7 +1,7 @@
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
-  score: '',
+  assertions: 0,
+  score: 0,
   gravatarEmail: '',
 };
 
@@ -12,8 +12,8 @@ function playerReducer(state = INITIAL_STATE, action) {
   case 'USER_PERFORMANCE':
     return {
       ...state,
-      assertions: action.performanceData[0],
-      score: action.performanceData[1],
+      assertions: action.performanceData.assertions,
+      score: action.performanceData.score,
     };
   default:
     return state;

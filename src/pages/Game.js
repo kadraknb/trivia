@@ -1,4 +1,6 @@
 import React from 'react';
+import Countdown from 'react-countdown';
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { playerPerformance } from '../redux/actions';
@@ -17,20 +19,52 @@ class Game extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { getplayerPerformance } = this.props;
+    getplayerPerformance(this.state);
+  }
+
   nextQuestion = () => {
     this.setState({ turnFinished: false });
     const { perguntaN } = this.state;
     this.setState({ perguntaN: perguntaN + 1, isActive: true });
   }
 
+  timeEnded = () => {
+    const { isActive } = this.state;
+    this.setState({ turnFinished: true });
+    if (isActive === false) this.setState({ isActive: true });
+  }
+
+  getDifficulty = () => {
+    const { store: { game } } = this.props;
+    const { perguntaN } = this.state;
+    const hardLevel = 3;
+    const getDifficulty = game[perguntaN].difficulty;
+    switch (getDifficulty) {
+    case 'easy':
+      return 1;
+    case 'medium':
+      return 2;
+    case 'hard':
+      return hardLevel;
+    default:
+      break;
+    }
+  }
+
   handleAnswer = (event) => {
     const { assertions, score, isActive } = this.state;
-    const unitScore = 40;
-    const getId = event.target.id;
+    const { getplayerPerformance } = this.props;
+    const getName = event.target.name;
+    const pointBase = 10;
     this.setState({ turnFinished: true });
-    if (getId === 'correct') {
+    if (getName === 'correctAnswer') {
+      const TimeRemaining = document.getElementById('timer').innerHTML;
+      const unitScore = pointBase + (TimeRemaining * this.getDifficulty());
       this.setState({
-        assertions: assertions + 1, score: score + unitScore });
+        assertions: assertions + 1, score: score + unitScore },
+      () => getplayerPerformance(this.state));
     }
     if (isActive === false) this.setState({ isActive: true });
   }
@@ -47,18 +81,21 @@ class Game extends React.Component {
         data-testid="correct-answer"
         key="true"
         type="button"
-        id={ turnFinished ? 'correctAnswer' : '' }
+        name="correctAnswer"
+        id={ turnFinished && 'correctAnswer' }
         onClick={ this.handleAnswer }
+        disabled={ turnFinished }
       >
         {game[perguntaN].correct_answer}
       </button>);
     const answerFalse = (game[perguntaN].incorrect_answers.map((aa, ii) => (
       <button
         data-testid={ `wrong-answer-${ii}` }
-        className={ turnFinished ? 'incorrectAnswer' : '' }
+        className={ turnFinished && 'incorrectAnswer' }
         key={ ii }
         type="button"
         onClick={ this.handleAnswer }
+        disabled={ turnFinished }
       >
         {aa}
       </button>
@@ -67,9 +104,16 @@ class Game extends React.Component {
     return answerFalse;
   }
 
+  handleTimer = ({ seconds }) => (
+    <span id="timer">
+      {seconds}
+    </span>
+  );
+
   render() {
     const { store: { game } } = this.props;
-    const { perguntaN, isActive } = this.state;
+    const { perguntaN, isActive, turnFinished } = this.state;
+    const setTime = 30000;
     const nextButton = (
       <button
         type="button"
@@ -83,12 +127,25 @@ class Game extends React.Component {
       <div>
         <Header />
         <h1>Trivia</h1>
+        { turnFinished
+          ? <span> Tempo restante: 0 segundos  </span>
+          : (
+            <Countdown
+              date={ Date.now() + setTime }
+              renderer={ this.handleTimer }
+              onComplete={ this.timeEnded }
+            >
+              <span>
+                Tempo restante: 0 segundos
+              </span>
+            </Countdown>
+          )}
         <h2 data-testid="question-category">{game[perguntaN].category}</h2>
         <h4 data-testid="question-text">{game[perguntaN].question}</h4>
         <ol data-testid="answer-options">
-          { this.answer() }
+          {this.answer()}
         </ol>
-        { isActive ? nextButton : '' }
+        {isActive && nextButton}
       </div>
     );
   }
@@ -98,6 +155,7 @@ Game.propTypes = {
   store: PropTypes.shape({
     game: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
+  getplayerPerformance: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({ store });
