@@ -11,8 +11,8 @@ import App from '../App';
 import Login from '../pages/Login';
 import userEvent from '@testing-library/user-event';
 
-describe('Página de Login', () => {
-  it('verifica se ao clicar no botão de Configurações, o usuário é redirecionado para a página correspondente:', async () => {
+describe('Página de Game', () => {
+  it('verifica se ao efetuar o login a pessoa usuária é direcionada à página de jogos:', async () => {
     const initialStateMock = {
       player: {
         assertions: 4,
@@ -73,7 +73,7 @@ describe('Página de Login', () => {
     await waitFor(() => expect(wrongButton).not.toBeDisabled(), { timeout: 3000 });
 
   });
-  it('verifica se ao clicar no botão de Configurações, o usuário é redirecionado para a página correspondente:', async () => {
+  it('verifica se as alternativas são automaticamente desabilitadas após o timer zerar:', async () => {
     renderWithRouterAndRedux(<App />)
 
     const userInputEmail = screen.getByTestId('input-gravatar-email');
@@ -96,4 +96,43 @@ describe('Página de Login', () => {
 
 
   }, 35000);
+  it('verifica se após a quinta pergunta o botão Next redireciona para feedback:', async () => {
+    renderWithRouterAndRedux(<App />)
+
+    const userInputEmail = screen.getByTestId('input-gravatar-email');
+    userEvent.type(userInputEmail, 'some@some.com');
+
+    const userInputName = screen.getByTestId('input-player-name');
+    userEvent.type(userInputName, 'Michel');
+
+    const playButton = screen.getByTestId('btn-play');
+    userEvent.click(playButton);
+
+    await waitFor(() => expect(screen.getByTestId(/countdown/i)).toBeInTheDocument(), { timeout: 3000 });
+
+    const correctButton = screen.getByTestId('correct-answer');
+    
+    userEvent.click(correctButton);
+    await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
+    const nextButton = screen.getByTestId('btn-next');
+    userEvent.click(nextButton);
+
+    userEvent.click(correctButton);
+    await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
+    userEvent.click(nextButton);
+
+    userEvent.click(correctButton);
+    await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
+    userEvent.click(nextButton);
+
+    userEvent.click(correctButton);
+    await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
+    userEvent.click(nextButton);
+
+    userEvent.click(correctButton);
+    await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
+    userEvent.click(nextButton);
+
+    await waitFor(() => expect(screen.getByTestId(/feedback-total-question/i)).toBeInTheDocument(), { timeout: 3000 });
+  });
 })
