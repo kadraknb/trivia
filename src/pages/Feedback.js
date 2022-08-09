@@ -22,8 +22,8 @@ class Feedback extends React.Component {
     return (
       <>
         <Header />
-        <p data-testid="feedback-total-score">Score: {score}</p>
-        <p data-testid="feedback-total-question">Acertos: {assertions}</p>
+        <p data-testid="feedback-total-score">{score}</p>
+        <p data-testid="feedback-total-question">{assertions}</p>
         <FeedbackMessage />
         <button
           type="button"
