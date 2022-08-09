@@ -35,11 +35,20 @@ describe('Testa a página de Feedback', () => {
   });
 
   it('Testa se o botão "Play Again" redireciona e renderiza a página certa', () => {
-    const { history } = renderWithRouterAndRedux(<Feedback />, '/feedback')
+    const { history } = renderWithRouterAndRedux(<Feedback />)
 
     const btnPlayAgain = screen.getByTestId('btn-play-again');
     userEvent.click(btnPlayAgain);
 
     expect(history.location.pathname).toBe('/');
   });
+
+  it('Testa se o botão "Ranking" redireciona e renderiza a página certa', () => {
+    const { history } = renderWithRouterAndRedux(<Feedback />)
+
+    const btnRanking = screen.getByTestId('btn-ranking');
+    userEvent.click(btnRanking);
+
+    expect(history.location.pathname).toBe('/ranking');
+  })
 });
