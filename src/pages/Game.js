@@ -24,11 +24,26 @@ class Game extends React.Component {
     getplayerPerformance(this.state);
   }
 
+  upToLStorage = () => {
+    const { store: { player: { img, name, score } } } = this.props;
+    const newRanking = [img, name, score];
+    const rankings = JSON.parse(localStorage.getItem('ranking'));
+    if (rankings === null) {
+      localStorage.setItem('ranking', JSON.stringify([newRanking]));
+    } else {
+      rankings.push(newRanking);
+      localStorage.setItem('ranking', JSON.stringify(rankings));
+    }
+  };
+
   nextQuestion = () => {
     const { perguntaN } = this.state;
     const { history } = this.props;
     const maxPalyed = 4;
-    if (perguntaN === maxPalyed) history.push('/feedback');
+    if (perguntaN === maxPalyed) {
+      this.upToLStorage();
+      history.push('/feedback');
+    }
     this.setState({ turnFinished: false });
     this.setState({ perguntaN: perguntaN + 1, isActive: true });
   }
@@ -44,16 +59,9 @@ class Game extends React.Component {
     const { perguntaN } = this.state;
     const hardLevel = 3;
     const getDifficulty = game[perguntaN].difficulty;
-    switch (getDifficulty) {
-    case 'easy':
-      return 1;
-    case 'medium':
-      return 2;
-    case 'hard':
-      return hardLevel;
-    default:
-      break;
-    }
+    if (getDifficulty === 'easy') return 1;
+    if (getDifficulty === 'medium') return 2;
+    if (getDifficulty === 'hard') return hardLevel;
   }
 
   handleAnswer = (event) => {
@@ -108,7 +116,7 @@ class Game extends React.Component {
   }
 
   handleTimer = ({ seconds }) => (
-    <span id="timer">
+    <span data-testid="countdown" id="timer">
       {seconds}
     </span>
   );
@@ -157,6 +165,11 @@ class Game extends React.Component {
 Game.propTypes = {
   store: PropTypes.shape({
     game: PropTypes.arrayOf(PropTypes.shape()),
+    player: PropTypes.shape({
+      img: PropTypes.string,
+      name: PropTypes.string,
+      score: PropTypes.number,
+    }),
   }).isRequired,
   getplayerPerformance: PropTypes.func.isRequired,
   history: PropTypes.shape({
