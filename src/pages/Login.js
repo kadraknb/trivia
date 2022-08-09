@@ -64,7 +64,7 @@ class Login extends React.Component {
     return (
       <form className="LoginForm">
         <fieldset>
-          <p>Trivia</p>
+          <p className="title-trivia title-trivia-animated">Trivia</p>
           <input
             className="loginForm placeholder col-10 bg-light"
             data-testid="input-gravatar-email"
