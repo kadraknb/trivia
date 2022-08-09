@@ -59,16 +59,9 @@ class Game extends React.Component {
     const { perguntaN } = this.state;
     const hardLevel = 3;
     const getDifficulty = game[perguntaN].difficulty;
-    switch (getDifficulty) {
-    case 'easy':
-      return 1;
-    case 'medium':
-      return 2;
-    case 'hard':
-      return hardLevel;
-    default:
-      break;
-    }
+    if (getDifficulty === 'easy') return 1;
+    if (getDifficulty === 'medium') return 2;
+    if (getDifficulty === 'hard') return hardLevel;
   }
 
   handleAnswer = (event) => {
