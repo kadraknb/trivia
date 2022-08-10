@@ -79,7 +79,7 @@ describe('Página de Login', () => {
         userEvent.click(playButton);       
 
         
-        await waitFor(() => expect(screen.getByTestId(/answer-options/i)).toBeInTheDocument(), {timeout: 3000});
+        await waitFor(() => expect(screen.getByTestId(/answer-options/i)).toBeInTheDocument(), {timeout: 4000});
     });
     it('verifica se ao clicar no botão de Configurações, o usuário é redirecionado para a página correspondente:', async () => {
         renderWithRouterAndRedux(<App />)
@@ -95,5 +95,33 @@ describe('Página de Login', () => {
 
         
         await waitFor(() => expect(screen.getByTestId(/settings/i)).toBeInTheDocument(), {timeout: 3000});
+    });
+    it('verifica se da erro na api', async () => {
+      const { history } = renderWithRouterAndRedux(<App />);
+  
+      global.fetch = () => {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve({
+              response_code: 3,
+              response_message: 'Token Generated Successfully!',
+              token: '1a5effaf8bb80586c5a6e2ddccd51735eeb5b57a5ac640144cdb5bbe2642cce0',
+            }),
+        });
+      };
+      const playButton = screen.getByTestId('btn-play');
+      expect(playButton).toBeDisabled();
+  
+      userEvent.type(screen.getByTestId('input-gravatar-email'), 'some@some.com');
+  
+      userEvent.type(screen.getByTestId('input-player-name'), 'Michel');
+  
+      expect(playButton).not.toBeDisabled();
+      userEvent.click(screen.getByTestId('btn-play'));
+  
+      await waitFor(
+        () => expect(history.location.pathname).toBe('/'),
+        { timeout: 3000 }
+      );
     });
 })

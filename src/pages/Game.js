@@ -50,18 +50,14 @@ class Game extends React.Component {
 
   timeEnded = () => {
     const { isActive } = this.state;
-    this.setState({ turnFinished: true });
-    if (isActive === false) this.setState({ isActive: true });
+    this.setState({ turnFinished: true, isActive: !isActive });
   }
 
   getDifficulty = () => {
     const { store: { game } } = this.props;
     const { perguntaN } = this.state;
-    const hardLevel = 3;
-    const getDifficulty = game[perguntaN].difficulty;
-    if (getDifficulty === 'easy') return 1;
-    if (getDifficulty === 'medium') return 2;
-    if (getDifficulty === 'hard') return hardLevel;
+    const Difficulty = { easy: 1, medium: 2, hard: 3 };
+    return Difficulty[game[perguntaN].difficulty];
   }
 
   handleAnswer = (event) => {

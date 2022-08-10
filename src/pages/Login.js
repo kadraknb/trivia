@@ -21,12 +21,9 @@ class Login extends React.Component {
   }
 
   validateFields = () => {
-    const { isDisable, name } = this.state;
-    const validEmail = this.validateEmail();
-    const validName = name.length > 0;
-    const checker = (validEmail * validName);
-    if (isDisable === false && checker === 0) this.setState({ isDisable: true });
-    if (checker === 1) this.setState({ isDisable: false });
+    const { name } = this.state;
+    const checker = (this.validateEmail() && name.length > 0);
+    this.setState({ isDisable: !checker });
   }
 
   validToken = async (token) => {

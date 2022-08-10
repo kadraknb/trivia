@@ -128,11 +128,34 @@ describe('Página de Game', () => {
     userEvent.click(correctButton);
     await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
     userEvent.click(nextButton);
-
-    userEvent.click(correctButton);
+    userEvent.click(screen.getByTestId('wrong-answer-0'));
     await waitFor(() => expect(correctButton).toBeDisabled(), { timeout: 2000 });
     userEvent.click(nextButton);
 
     await waitFor(() => expect(screen.getByTestId(/feedback-total-question/i)).toBeInTheDocument(), { timeout: 3000 });
+  });
+  it('verifica se após a quinta pergunta o botão Next redireciona para feedback:', async () => {
+    renderWithRouterAndRedux(<App />)
+    for (let index = 0; index < 2; index++) {
+    const userInputEmail = screen.getByTestId('input-gravatar-email');
+    userEvent.type(userInputEmail, 'some@some.com');
+
+    const userInputName = screen.getByTestId('input-player-name');
+    userEvent.type(userInputName, 'Michel');
+
+    const playButton = screen.getByTestId('btn-play');
+    userEvent.click(playButton);
+
+    await waitFor(() => expect(screen.getByTestId('correct-answer')).toBeInTheDocument(), { timeout: 3000 });
+
+    for (let index = 0; index < 5; index++) {
+      const correctButton = screen.getByTestId('correct-answer');
+      userEvent.click(correctButton);
+      userEvent.click(screen.getByTestId('btn-next'));
+    } 
+    
+    await waitFor(() => expect(screen.getByTestId(/feedback-total-question/i)).toBeInTheDocument(), { timeout: 1000 });
+    userEvent.click(screen.getByTestId('btn-play-again')); 
+  }
   });
 })
