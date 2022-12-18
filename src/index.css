@@ -5,72 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(46, 41, 78);
-  font-family: 'Saira', sans-serif;
-  overflow: hidden;
-  color: rgb(255, 248, 240);
+  
 }
 
-body::-webkit-scrollbar {
-  display: none;
-  /* for Chrome, Safari, and Opera */
-}
-
-.incorrectAnswer {
-  border: 3px solid red;
-  border-color: red;
-}
-
-#correctAnswer {
-  border: 3px solid rgb(6, 240, 15);
-  border-color: rgb(6, 240, 15);
-}
-
-.title-trivia {
-  animation: color-animation 4s linear infinite;
-}
-
-.title-trivia-animated {
-  --color-1: #119DA4;
-  --color-2: #FCA311;
-  --color-3: rgb(255, 248, 240);
-}
-
-@keyframes color-animation {
-  0%    {color: var(--color-1)}
-  32%   {color: var(--color-1)}
-  33%   {color: var(--color-2)}
-  65%   {color: var(--color-2)}
-  66%   {color: var(--color-3)}
-  99%   {color: var(--color-3)}
-  100%  {color: var(--color-1)}
-}
-
-.LoginForm {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15% auto;
-  width: 500px;
-  height: 300px;
-  text-align: center;
-  background-color: rgb(255, 200, 87);
-  border-radius: 8px;
-  color: rgb(255, 253, 231);
-}
-
-.LoginForm p {
-  font-size: 60px;
-  font-family: 'Luckiest Guy', cursive;
-}
-
-form input  {
-  border-radius: 8px;
-}
-
-form button  {
-  margin: 5px;
-  border-radius: 8px;
-  width: 150px;
- 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
